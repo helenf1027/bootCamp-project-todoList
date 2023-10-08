@@ -1,0 +1,92 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+
+    <!-- Bootstrap web font -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css"
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Handlee&family=Libre+Baskerville&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="/style.css" />
+
+    <title>Document</title>
+    <!--link jQuery to html files-->
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+  </head>
+
+  <body onload="startTime()">
+    <div
+      class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start"
+    >
+      <a
+        href="/"
+        class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none"
+      >
+        <img
+          class="bi me-2"
+          width="40"
+          height="32"
+          src="images/icon_0921.png"
+          alt="panda icon"
+        />
+      </a>
+
+      <ul
+        class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0"
+      >
+        <li><a href="/" class="nav-link px-2 text-black">Home</a></li>
+        <!-- <li><a href="#" class="nav-link px-2 text-black">Features</a></li>
+        <li><a href="#" class="nav-link px-2 text-black">About</a></li> -->
+      </ul>
+
+      <div class="text-end">
+        <div id="time"></div>
+
+        <!-- <button type="button" class="btn btn-outline-dark me-2">Login</button>
+        <button type="button" class="btn btn-warning">Sign-up</button> -->
+      </div>
+    </div>
+
+    <script>
+      function startTime() {
+        const today = new Date();
+        let h = today.getHours();
+        let m = today.getMinutes();
+        let s = today.getSeconds();
+        m = checkTime(m);
+        s = checkTime(s);
+        document.getElementById("time").innerHTML = h + ":" + m + ":" + s;
+        setTimeout(startTime, 1000);
+      }
+
+      function checkTime(i) {
+        // modify the position of footer
+        if ($(".inputCheckbox").length > 10) {
+          $("footer").css("position", "relative");
+          $("footer").css("bottom", "0");
+        }
+
+        if (i < 10) {
+          i = "0" + i;
+        } // add zero in front of numbers < 10
+        return i;
+      }
+    </script>
+  </body>
+</html>

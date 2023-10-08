@@ -1,0 +1,133 @@
+<%- include("parts/header.ejs") %>
+
+<main>
+  <div class="todo-list-header">
+    <h1><%= new Date().toLocaleDateString(); %></h1>
+    <form action="/today" method="POST" class="submit-form">
+      <input type="submit" name="todayTodo" value="Today" />
+    </form>
+    <form action="/workTodo" method="POST" class="submit-form">
+      <input type="submit" name="workTodo" value="Work" />
+    </form>
+  </div>
+
+  <div class="todo-input-container">
+    <% if(locals.title) {%>
+    <h2><%= title %></h2>
+
+    <input
+      id="todoItemInput"
+      type="text"
+      name="todoItem"
+      placeholder="Add to-do items"
+    />
+    <button id="todoAddButton" type="button" onclick="getInputValue();">
+      Add</button
+    ><br />
+
+    <% } %>
+  </div>
+
+  <div id="todoList"></div>
+
+  <script>
+    // get input value from todo input text
+    function getInputValue() {
+      var inputVal = $("#todoItemInput").val();
+      if (inputVal.length > 0) {
+        let id = new Date().getTime();
+        $("#todoList").append(
+          "<input type='checkbox' class='inputCheckbox' id='" +
+            id +
+            "' value ='" +
+            inputVal +
+            "'/>"
+        );
+        $("#todoList").append(
+          "<label id ='" +
+            id +
+            "' class='todoLabel' for='inputCheckbox'>" +
+            inputVal +
+            "</label><br>"
+        );
+        $("#todoItemInput").val("");
+        // alert("input:" + homeInputList);
+      } else {
+        alert("Nothing input!");
+      }
+    }
+
+    // click "Add" button when "Enter" key pressed, "key code === 13" means Enter key
+    $("#todoItemInput").keyup(function (event) {
+      if (event.keyCode === 13) {
+        $("#todoAddButton").click();
+      }
+    });
+
+    // change label text to strikethrough if checkbox checked
+    $("#todoList").on("click", function () {
+      if ($("input[type='checkbox']:checked").length > 0) {
+        for (let i = 0; i < $("input[type='checkbox']").length; i++) {
+          if ($("input[type='checkbox']").get(i).checked) {
+            $("label[for='inputCheckbox']")
+              .eq(i)
+              .css("text-decoration", "line-through");
+            localStorage.setItem(
+              $("input[type='checkbox']").get(i).id,
+              "checked"
+            );
+          } else {
+            $("label[for='inputCheckbox']")
+              .eq(i)
+              .css("text-decoration", "none");
+            localStorage.removeItem($("input[type='checkbox']").get(i).id);
+          }
+        }
+      } else {
+        $("label[for='inputCheckbox']").css("text-decoration", "none");
+        for (let i = 0; i < $("input[type='checkbox']").length; i++) {
+          localStorage.removeItem($("input[type='checkbox']").get(i).id);
+        }
+      }
+    });
+
+    //store checkbox data & show to-do list on new page
+    $("input[type='submit']").on("click", function (event) {
+      localStorage.title = event.target.value;
+      let todoList;
+      if (localStorage.title !== $("h2").text()) {
+        todoList = localStorage.title === "Today" ? "Work" : "Today";
+      } else {
+        todoList = localStorage.title;
+      }
+
+      if ($("#todoList").html().length > 0) {
+        localStorage.setItem(
+          todoList + "_" + $("h1").text(),
+          $("#todoList").html()
+        );
+      }
+    });
+
+    // add previous to-do list when page transfered
+    $(document).ready(function () {
+      $("#todoList").append(
+        localStorage[$("h2").text() + "_" + $("h1").text()]
+      );
+      //add check on checkbox
+      for (let i = 0; i < $("input[type='checkbox']").length; i++) {
+        if (
+          Object.keys(localStorage).includes(
+            $("input[type='checkbox']").get(i).id
+          )
+        ) {
+          $("input[type='checkbox']").eq(i).attr("checked", "checked");
+        } else {
+          $("input[type='checkbox']").eq(i).attr("checked", false);
+        }
+      }
+    });
+  </script>
+</main>
+
+<%- include("parts/footer.ejs") %>
